@@ -1,10 +1,24 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
-import { CreateUserDTO } from './dto/CreateUserDTO.dto';
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  CreateEmergencyContact,
+  CreateUserDTO,
+  UpdateUserDTO,
+} from './dto/CreateUserDTO.dto';
 import { UsersService } from './users.service';
 import { Response } from 'express';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { ForgotPasswordDTO } from './dto/ForgotPasswordDTO.dto';
 import { ResetPasswordDTO } from './dto/ResetPasswordDTO.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('users')
 @ApiTags('Users')
@@ -35,5 +49,51 @@ export class UsersController {
   async resetPassword(@Body() body: ResetPasswordDTO, @Res() res: Response) {
     const response = await this.service.resetPassword(body);
     return res.status(response.status).json(response);
+  }
+
+  @Get('my-profile')
+  @UseGuards(AuthGuard)
+  async getProfile(@Res() res: Response, @Req() req: any) {
+    const email = req.user.email;
+    const response = await this.service.getProfile(email);
+
+    return res.status(response.status).json(response);
+  }
+
+  @Patch('update-profile')
+  @UseGuards(AuthGuard)
+  async updateProfile(
+    @Body() body: UpdateUserDTO,
+    @Res() res: Response,
+    @Req() req: any,
+  ) {
+    const email = req.user.email;
+    const response = await this.service.updateProfile(body, email);
+
+    return res.status(response.status).json(response);
+  }
+
+  @Patch('update-emergency-contact')
+  @UseGuards(AuthGuard)
+  async updateEmergencyContact(
+    @Body() body: CreateEmergencyContact,
+    @Res() res: Response,
+    @Req() req: any,
+  ) {
+    const email = req.user.email;
+
+    const response = await this.service.updateEmergencyContact(body, email);
+
+    return res.status(response.status).json(response);
+  }
+
+  @Get('get-emergency-contact')
+  @UseGuards(AuthGuard)
+  async getEmergencyContact(@Res() res: Response, @Req() req: any) {
+    const id = req.user.sub;
+
+    const response = await this.service.getEmergencyContact(id);
+
+    return res.json(response);
   }
 }

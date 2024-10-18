@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDTO } from './dto/CreateUserDTO.dto';
+import {
+  CreateEmergencyContact,
+  CreateUserDTO,
+  UpdateUserDTO,
+} from './dto/CreateUserDTO.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './models/User.model';
 import { Model } from 'mongoose';
@@ -66,7 +70,7 @@ export class UsersService {
   }
 
   async findOne(email: string): Promise<User | undefined> {
-    return this.userModel.findOne({ email });
+    return await this.userModel.findOne({ email });
   }
 
   async userExists(email: string) {
@@ -149,6 +153,60 @@ export class UsersService {
     return {
       status: 200,
       message: 'Password has been updated successfully',
+    };
+  }
+
+  async getEmergencyContact(userId: string) {
+    return await this.emergencyModel.findOne({ user: userId });
+  }
+
+  async getProfile(email: string) {
+    const user: any = await this.findOne(email);
+
+    const { password, ...result } = user._doc;
+
+    return {
+      status: 200,
+      data: result,
+    };
+  }
+
+  async updateProfile(body: UpdateUserDTO, email: string) {
+    const user = await this.userModel.findOne({ email });
+
+    await this.userModel.updateOne(
+      {
+        _id: user._id,
+      },
+      {
+        name: body.name,
+        phoneNumber: body.phoneNumber,
+      },
+    );
+
+    return {
+      status: 200,
+      message: 'Successfully updated profile',
+    };
+  }
+
+  async updateEmergencyContact(body: CreateEmergencyContact, email: string) {
+    const user = await this.userModel.findOne({ email });
+
+    await this.emergencyModel.updateOne(
+      {
+        user: user._id,
+      },
+      {
+        name: body.name,
+        email: body.email,
+        phoneNumber: body.phoneNumber,
+      },
+    );
+
+    return {
+      status: 200,
+      message: 'Successfully updated emergency contact',
     };
   }
 }

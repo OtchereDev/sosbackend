@@ -47,3 +47,13 @@ export class CreateUserDTO {
   @ApiProperty({ type: CreateEmergencyContact })
   emergencyContact: CreateEmergencyContact;
 }
+
+export class UpdateUserDTO {
+  @IsNotEmpty()
+  @ApiProperty()
+  name: string;
+
+  @IsPhoneNumber()
+  @ApiProperty()
+  phoneNumber: string;
+}

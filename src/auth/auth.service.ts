@@ -24,10 +24,14 @@ export class AuthService {
 
     const payload = { sub: (user as any)._id, email: user.email };
     const { password: n, ...rest } = (user as any)._doc;
+    const emergencyContact = await this.usersService.getEmergencyContact(
+      (user as any)._id,
+    );
 
     return {
       access_token: await this.jwtService.signAsync(payload),
       user: rest,
+      emergency_contact: emergencyContact,
     };
   }
 }
