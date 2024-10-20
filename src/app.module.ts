@@ -5,6 +5,9 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EmergencyModule } from './emergency/emergency.module';
+import { RespondersModule } from './responders/responders.module';
+import { FirebaseModule } from './firebase/firebase.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -31,6 +34,9 @@ import { EmergencyModule } from './emergency/emergency.module';
       inject: [ConfigService],
     }),
     EmergencyModule,
+    RespondersModule,
+    FirebaseModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [],
   providers: [],

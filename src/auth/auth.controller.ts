@@ -13,4 +13,10 @@ export class AuthController {
   login(@Body() body: LoginDTO) {
     return this.authService.login(body.email, body.password);
   }
+
+  @Post('login-responder')
+  @ApiBody({ type: LoginDTO })
+  loginResponder(@Body() body: LoginDTO) {
+    return this.authService.loginResponder(body.email, body.password);
+  }
 }

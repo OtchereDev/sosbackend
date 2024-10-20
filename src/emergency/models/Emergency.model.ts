@@ -2,7 +2,6 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { User } from 'src/users/models/User.model';
 import * as mongoose from 'mongoose';
-import { Location } from './Location.model';
 
 export type EmergencyDocument = HydratedDocument<Emergency>;
 
@@ -24,6 +23,11 @@ export enum EmergencySeverity {
   MEDIUM = 'MEDIUM',
   HIGH = 'HIGH',
 }
+
+export type ILocation = {
+  type: string;
+  coordinates: [number, number];
+};
 
 @Schema({
   timestamps: true,
@@ -47,11 +51,36 @@ export class Emergency {
   @Prop({ enum: EmergencySeverity })
   severity: EmergencySeverity;
 
-  @Prop({ type: Location, required: true })
-  location: Location;
+  @Prop({
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+  })
+  location: {
+    type: {
+      type: String;
+      enum: ['Point'];
+      required: true;
+    };
+    coordinates: {
+      type: [Number];
+      required: true;
+    };
+  };
+
+  @Prop()
+  locationName: string;
 
   @Prop({ type: [String] })
   photos: string[];
 }
 
 export const EmergencySchema = SchemaFactory.createForClass(Emergency);
+
+EmergencySchema.index({ location: '2dsphere' });

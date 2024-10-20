@@ -15,6 +15,10 @@ export class CreateEmergencyDTO {
   @ApiProperty()
   location: string;
 
+  @ApiProperty()
+  @IsNotEmpty()
+  locationName: string;
+
   @IsEnum(EmergencyType)
   @ApiProperty()
   emergencyType: string;

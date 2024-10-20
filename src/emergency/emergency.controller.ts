@@ -87,4 +87,12 @@ export class EmergencyController {
 
     return res.status(response.status).json(response);
   }
+
+  @Post('test')
+  async testAssignment() {
+    // await this.service.assignResponderToEmergency('user-emergency', 0);
+    return {
+      message: 'Assignment successfully started',
+    };
+  }
 }

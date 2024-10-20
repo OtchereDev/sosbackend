@@ -1,16 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Emergency, EmergencyStatus } from './models/Emergency.model';
 import { Model } from 'mongoose';
 import * as cloudinary from 'cloudinary';
 import { CreateEmergencyDTO } from './dto/CreateEmergency.dto';
 import { User } from 'src/users/models/User.model';
+import { RespondersService } from 'src/responders/responders.service';
+import { SchedulerRegistry } from '@nestjs/schedule';
+import { FirebaseService } from 'src/firebase/firebase.service';
 
 @Injectable()
 export class EmergencyService {
   constructor(
     @InjectModel(Emergency.name) private emergencyModel: Model<Emergency>,
     @InjectModel(User.name) private userModel: Model<User>,
+    @Inject() private responderService: RespondersService,
+    private schedulerRegistry: SchedulerRegistry,
+    private firebaseService: FirebaseService,
   ) {}
 
   async getMyEmergency(email: string) {
@@ -80,13 +86,26 @@ export class EmergencyService {
     const emergency = await this.emergencyModel.create({
       user: user._id,
       location: {
-        latitude: parseFloat(lat),
-        longitude: parseFloat(long),
+        type: 'Point',
+        coordinates: [parseFloat(long), parseFloat(lat)],
       },
+      locationName: body.locationName,
       emergencyType: body.emergencyType,
       description: body.description,
       severity: body.severity,
       photos: body.photos ?? [],
+    });
+
+    this.assignResponderToEmergency({
+      emergency_id: emergency._id.toString(),
+      user_id: user._id.toString(),
+      type: body.emergencyType,
+      severity: body.severity,
+      location: {
+        name: body.locationName,
+        longitude: parseFloat(long),
+        latitude: parseFloat(lat),
+      },
     });
 
     return {
@@ -120,6 +139,8 @@ export class EmergencyService {
         status: EmergencyStatus.CANCELLED,
       },
     );
+
+    this.clearEmergency(`emergency-${emergencyId}`, emergencyId);
 
     return {
       status: 200,
@@ -164,5 +185,56 @@ export class EmergencyService {
       status: 200,
       emergency,
     };
+  }
+
+  async assignResponderToEmergency(data: {
+    emergency_id: string;
+    user_id: string;
+    type: string;
+    severity: string;
+    location: { name: string; longitude: number; latitude: number };
+  }) {
+    let currentOffset = 0;
+    const name = `emergency-${data.emergency_id}`;
+
+    const callback = async () => {
+      console.log(`Interval ${name} executing with offset ${currentOffset}`);
+      const responder = await this.responderService.findClosestResponder(
+        data.location.longitude,
+        data.location.latitude,
+        data.type,
+        currentOffset,
+      );
+
+      if (!responder) {
+        this.clearEmergency(name, data.emergency_id);
+
+        // TODO: call on admin to handle this
+
+        return;
+      }
+
+      await this.firebaseService.createOrUpdateActiveEmergency({
+        ...data,
+        responder_id: responder._id.toString(),
+      });
+
+      currentOffset += 1;
+    };
+
+    await callback();
+
+    // Start the interval (executing every 3 minutes, or 180000 milliseconds)
+    const interval = setInterval(callback, 180000);
+    this.schedulerRegistry.addInterval(name, interval);
+  }
+
+  async clearEmergency(name: string, emergencyId: string) {
+    console.log('Clearing emergency responder search');
+    const interval = this.schedulerRegistry.getInterval(name);
+    clearInterval(interval);
+    this.schedulerRegistry.deleteInterval(name);
+
+    await this.firebaseService.deleteActiveEmergency(emergencyId);
   }
 }
