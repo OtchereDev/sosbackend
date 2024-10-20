@@ -140,7 +140,7 @@ export class EmergencyService {
       },
     );
 
-    this.clearEmergency(`emergency-${emergencyId}`, emergencyId);
+    await this.clearEmergency(`emergency-${emergencyId}`, emergencyId);
 
     return {
       status: 200,
@@ -207,7 +207,7 @@ export class EmergencyService {
       );
 
       if (!responder) {
-        this.clearEmergency(name, data.emergency_id);
+        await this.clearEmergency(name, data.emergency_id);
 
         // TODO: call on admin to handle this
 
@@ -236,5 +236,65 @@ export class EmergencyService {
     this.schedulerRegistry.deleteInterval(name);
 
     await this.firebaseService.deleteActiveEmergency(emergencyId);
+  }
+
+  async acceptEmergency(body: { emergencyId: string; responderId: string }) {
+    const name = `emergency-${body.emergencyId}`;
+
+    const emergency = await this.emergencyModel.findOne({
+      _id: body.emergencyId,
+    });
+
+    if (!emergency) {
+      return {
+        status: 400,
+        message: 'emergency not found',
+      };
+    }
+
+    await this.emergencyModel.updateOne(
+      {
+        _id: body.emergencyId,
+      },
+      {
+        responder: body.responderId,
+        status: EmergencyStatus.INPROGRESS,
+      },
+    );
+
+    await this.clearEmergency(name, body.emergencyId);
+
+    return {
+      status: 200,
+      message: 'emergency successfully accepted',
+    };
+  }
+
+  async completeEmergency(body: { emergencyId: string; responderId: string }) {
+    const emergency = await this.emergencyModel.findOne({
+      _id: body.emergencyId,
+      responder: body.responderId,
+    });
+
+    if (!emergency) {
+      return {
+        status: 400,
+        message: 'emergency not found',
+      };
+    }
+
+    await this.emergencyModel.updateOne(
+      {
+        _id: body.emergencyId,
+      },
+      {
+        status: EmergencyStatus.RESOLVED,
+      },
+    );
+
+    return {
+      status: 200,
+      message: 'emergency successfully completed',
+    };
   }
 }

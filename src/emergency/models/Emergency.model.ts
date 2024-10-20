@@ -2,13 +2,14 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { User } from 'src/users/models/User.model';
 import * as mongoose from 'mongoose';
+import { Responder } from 'src/responders/models/Responder.models';
 
 export type EmergencyDocument = HydratedDocument<Emergency>;
 
 export enum EmergencyStatus {
   RESOLVED = 'RESOLVED',
   UNRESOLVED = 'UNRESOLVED',
-  DISMISSED = 'DISMISSED',
+  INPROGRESS = 'INPROGRESS',
   CANCELLED = 'CANCELLED',
 }
 
@@ -79,6 +80,9 @@ export class Emergency {
 
   @Prop({ type: [String] })
   photos: string[];
+
+  @Prop({ ref: 'Responder', type: mongoose.Schema.Types.ObjectId })
+  responder: Responder;
 }
 
 export const EmergencySchema = SchemaFactory.createForClass(Emergency);

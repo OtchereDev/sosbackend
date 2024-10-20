@@ -74,10 +74,6 @@ export class RespondersService {
     return hPassword;
   }
 
-  async acceptEmergency() {}
-
-  async completeEmergency() {}
-
   async setCurrentLocation(body: CurrentLocationDTO) {
     try {
       const [lat, long] = body.location.split(',');

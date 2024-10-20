@@ -13,7 +13,7 @@ import { EmergencyService } from './emergency.service';
 import { PhotoUploadDTO } from './dto/PhotoUpload.dto';
 import { Response } from 'express';
 import { CreateEmergencyDTO } from './dto/CreateEmergency.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard, ResponderAuthGuard } from 'src/auth/auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('emergency')
@@ -62,6 +62,36 @@ export class EmergencyController {
     return res.status(response.status).json(response);
   }
 
+  @Patch('accept-emergency/:id')
+  @UseGuards(ResponderAuthGuard)
+  async acceptEmergency(
+    @Param('id') id: string,
+    @Res() res: Response,
+    @Req() req: any,
+  ) {
+    const response = await this.service.acceptEmergency({
+      emergencyId: id,
+      responderId: req.user.sub,
+    });
+
+    return res.status(response.status).json(response);
+  }
+
+  @Patch('complete-emergency/:id')
+  @UseGuards(ResponderAuthGuard)
+  async completeEmergency(
+    @Param('id') id: string,
+    @Res() res: Response,
+    @Req() req: any,
+  ) {
+    const response = await this.service.completeEmergency({
+      emergencyId: id,
+      responderId: req.user.sub,
+    });
+
+    return res.status(response.status).json(response);
+  }
+
   @Patch('/:id')
   @UseGuards(AuthGuard)
   async cancelEmergency(
@@ -86,13 +116,5 @@ export class EmergencyController {
     const response = await this.service.getEmergency(id, email);
 
     return res.status(response.status).json(response);
-  }
-
-  @Post('test')
-  async testAssignment() {
-    // await this.service.assignResponderToEmergency('user-emergency', 0);
-    return {
-      message: 'Assignment successfully started',
-    };
   }
 }
