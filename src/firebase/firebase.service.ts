@@ -64,8 +64,32 @@ export class FirebaseService {
         severity: data.severity,
         location: data.location,
         responder_id: data.responder_id,
+        status: 'CONNECTING',
       });
       return { message: 'Emergency created successfully', id: newDocRef.id };
+    }
+  }
+
+  async changeActiveEmergencyStatus(data: {
+    emergency_id: string;
+    status: string;
+  }) {
+    const collection = this.firebaseApp
+      .firestore()
+      .collection('activeEmergency');
+
+    // Query for an active emergency by emergency_id
+    const querySnapshot = await collection
+      .where('emergency_id', '==', data.emergency_id)
+      .limit(1)
+      .get();
+
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];
+      await doc.ref.update({
+        status: data.status,
+      });
+      return { message: 'Emergency updated successfully', id: doc.id };
     }
   }
 

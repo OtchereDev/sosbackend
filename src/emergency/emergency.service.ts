@@ -207,7 +207,10 @@ export class EmergencyService {
       );
 
       if (!responder) {
-        await this.clearEmergency(name, data.emergency_id);
+        await this.firebaseService.changeActiveEmergencyStatus({
+          emergency_id: data.emergency_id,
+          status: 'ABANDONED',
+        });
 
         // TODO: call on admin to handle this
 
@@ -239,8 +242,6 @@ export class EmergencyService {
   }
 
   async acceptEmergency(body: { emergencyId: string; responderId: string }) {
-    const name = `emergency-${body.emergencyId}`;
-
     const emergency = await this.emergencyModel.findOne({
       _id: body.emergencyId,
     });
@@ -262,7 +263,10 @@ export class EmergencyService {
       },
     );
 
-    await this.clearEmergency(name, body.emergencyId);
+    await this.firebaseService.changeActiveEmergencyStatus({
+      emergency_id: body.emergencyId,
+      status: 'ON-ROUTE',
+    });
 
     return {
       status: 200,
