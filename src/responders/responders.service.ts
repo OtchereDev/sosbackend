@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Responder } from './models/Responder.models';
+import { Responder, ResponderStatus } from './models/Responder.models';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { CreateResponderDTO } from './dto/CreateResponder.dto';
@@ -124,6 +124,7 @@ export class RespondersService {
     return await this.responderModel.findOne(
       {
         type,
+        status: ResponderStatus.IDLE,
         location: {
           $near: {
             $geometry: {
@@ -137,5 +138,16 @@ export class RespondersService {
       undefined,
       { skip: offset },
     );
+  }
+
+  async changeResponderStatus(responderId: string, status: string) {
+    try {
+      await this.responderModel.updateOne(
+        {
+          _id: responderId,
+        },
+        { status },
+      );
+    } catch (error) {}
   }
 }

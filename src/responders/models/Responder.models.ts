@@ -4,6 +4,11 @@ import { EmergencyType } from 'src/emergency/models/Emergency.model';
 
 export type ResponderDocument = HydratedDocument<Responder>;
 
+export enum ResponderStatus {
+  IDLE = 'IDLE',
+  BUSY = 'BUSY',
+}
+
 @Schema({
   timestamps: true,
 })
@@ -44,6 +49,9 @@ export class Responder {
 
   @Prop()
   locationName: string;
+
+  @Prop({ enum: ResponderStatus, default: ResponderStatus.IDLE })
+  status: string;
 }
 
 export const ResponderSchema = SchemaFactory.createForClass(Responder);
