@@ -207,6 +207,7 @@ export class EmergencyService {
       );
 
       if (!responder) {
+        console.log('ABANDONEDING Ememergency call admin');
         await this.firebaseService.changeActiveEmergencyStatus({
           emergency_id: data.emergency_id,
           status: 'ABANDONED',
