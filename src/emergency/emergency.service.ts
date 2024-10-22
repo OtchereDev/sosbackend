@@ -301,4 +301,33 @@ export class EmergencyService {
       message: 'emergency successfully completed',
     };
   }
+
+  async arriveAtEmergency(emergencyId: string, responderId: string) {
+    try {
+      await this.emergencyModel.updateOne(
+        {
+          _id: emergencyId,
+          responder: responderId,
+        },
+        {
+          status: EmergencyStatus.ARRIVED,
+        },
+      );
+
+      await this.firebaseService.changeActiveEmergencyStatus({
+        emergency_id: emergencyId,
+        status: EmergencyStatus.ARRIVED,
+      });
+
+      return {
+        status: 200,
+        message: 'Successfully updated emergency',
+      };
+    } catch (error: any) {
+      return {
+        status: 400,
+        message: error.message,
+      };
+    }
+  }
 }

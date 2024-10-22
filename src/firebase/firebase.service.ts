@@ -23,6 +23,7 @@ export class FirebaseService {
     latitude: number;
     userId: string;
     email: string;
+    locationName: string;
   }) {
     await this.firebaseApp
       .firestore()

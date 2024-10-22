@@ -117,4 +117,20 @@ export class EmergencyController {
 
     return res.status(response.status).json(response);
   }
+
+  @Post('/:id/responder-arrived')
+  @UseGuards(ResponderAuthGuard)
+  async arriveAtEmergency(
+    @Res() res: Response,
+    @Req() req: any,
+    @Param('id') emergencyId: string,
+  ) {
+    const responder = req.user.sub;
+    const response = await this.service.arriveAtEmergency(
+      emergencyId,
+      responder,
+    );
+
+    return res.status(response.status).json(response);
+  }
 }
