@@ -15,6 +15,11 @@ lerna-debug.log*
 # OS
 .DS_Store
 
+# Firebase
+/functions/
+.firebaserc
+firebase.json
+
 # Tests
 /coverage
 /.nyc_output
