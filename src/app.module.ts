@@ -9,6 +9,7 @@ import { RespondersModule } from './responders/responders.module';
 import { FirebaseModule } from './firebase/firebase.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AgoraModule } from './agora/agora.module';
+import { GuideModule } from './guide/guide.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { AgoraModule } from './agora/agora.module';
     FirebaseModule,
     ScheduleModule.forRoot(),
     AgoraModule,
+    GuideModule,
   ],
   controllers: [],
   providers: [],

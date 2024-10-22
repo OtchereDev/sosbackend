@@ -8,6 +8,7 @@ import { User } from 'src/users/models/User.model';
 import { RespondersService } from 'src/responders/responders.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { FirebaseService } from 'src/firebase/firebase.service';
+import { ResponderStatus } from 'src/responders/models/Responder.models';
 
 @Injectable()
 export class EmergencyService {
@@ -264,6 +265,11 @@ export class EmergencyService {
       },
     );
 
+    await this.responderService.changeResponderStatus(
+      body.responderId,
+      ResponderStatus.BUSY,
+    );
+
     await this.firebaseService.changeActiveEmergencyStatus({
       emergency_id: body.emergencyId,
       status: 'ON-ROUTE',
@@ -295,6 +301,11 @@ export class EmergencyService {
       {
         status: EmergencyStatus.RESOLVED,
       },
+    );
+
+    await this.responderService.changeResponderStatus(
+      body.responderId,
+      ResponderStatus.IDLE,
     );
 
     return {
