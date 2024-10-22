@@ -51,7 +51,7 @@ export class RespondersService {
         longitude: 0,
         latitude: 0,
         type: body.type,
-        locationName: '',
+        locationName: 'DEFAULT',
       });
 
       return {
