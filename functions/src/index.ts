@@ -25,8 +25,12 @@ export const onResponderDocumentChange = onDocumentWritten(
         },
       );
       console.log('API request for users successful:', response.data);
-    } catch (error) {
-      console.error('Error making API request for users:', error);
+    } catch (error: any) {
+      console.error(
+        'Error making API request for users:',
+        error?.response?.data,
+        error,
+      );
     }
   },
 );
