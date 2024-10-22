@@ -92,6 +92,21 @@ export class EmergencyController {
     return res.status(response.status).json(response);
   }
 
+  @Patch('retry-emergency/:id')
+  @UseGuards(AuthGuard)
+  async retryEmergency(
+    @Param('id') id: string,
+    @Res() res: Response,
+    @Req() req: any,
+  ) {
+    const response = await this.service.retryEmergency({
+      emergencyId: id,
+      userId: req.user.sub,
+    });
+
+    return res.status(response.status).json(response);
+  }
+
   @Patch('/:id')
   @UseGuards(AuthGuard)
   async cancelEmergency(

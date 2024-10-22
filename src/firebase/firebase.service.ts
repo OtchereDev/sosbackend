@@ -55,6 +55,7 @@ export class FirebaseService {
       const doc = querySnapshot.docs[0];
       await doc.ref.update({
         responder_id: data.responder_id,
+        status: 'CONNECTING',
       });
       return { message: 'Emergency updated successfully', id: doc.id };
     } else {

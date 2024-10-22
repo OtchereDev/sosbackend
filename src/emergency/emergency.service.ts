@@ -314,6 +314,61 @@ export class EmergencyService {
     };
   }
 
+  async retryEmergency(body: { emergencyId: string; userId: string }) {
+    const emergency = await this.emergencyModel.findOne({
+      _id: body.emergencyId,
+      user: body.userId,
+    });
+
+    if (!emergency) {
+      return {
+        status: 400,
+        message: 'emergency not found',
+      };
+    }
+
+    if (!this.isMoreThanTenMinutes(emergency.retryTime)) {
+      return {
+        status: 400,
+        message: 'You can only retry after 10 minutes. Please try again later',
+      };
+    }
+
+    await this.emergencyModel.updateOne(
+      {
+        _id: body.emergencyId,
+      },
+      {
+        retryTime: new Date(),
+      },
+    );
+
+    this.assignResponderToEmergency({
+      emergency_id: emergency._id.toString(),
+      user_id: emergency.user as unknown as string,
+      type: emergency.emergencyType,
+      severity: emergency.severity,
+      location: {
+        name: emergency.locationName,
+        longitude: emergency.location.coordinates[0],
+        latitude: emergency.location.coordinates[1],
+      },
+    });
+
+    return {
+      status: 200,
+      message: 'Finding you a new responder',
+    };
+  }
+
+  isMoreThanTenMinutes(givenTime: Date) {
+    const currentTime = new Date();
+    const timeDifference = (currentTime as any) - (new Date(givenTime) as any);
+    const tenMinutesInMilliseconds = 10 * 60 * 1000;
+
+    return timeDifference > tenMinutesInMilliseconds;
+  }
+
   async arriveAtEmergency(emergencyId: string, responderId: string) {
     try {
       await this.emergencyModel.updateOne(

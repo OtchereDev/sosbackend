@@ -84,6 +84,9 @@ export class Emergency {
 
   @Prop({ ref: 'Responder', type: mongoose.Schema.Types.ObjectId })
   responder: Responder;
+
+  @Prop({ default: new Date() })
+  retryTime?: Date;
 }
 
 export const EmergencySchema = SchemaFactory.createForClass(Emergency);
