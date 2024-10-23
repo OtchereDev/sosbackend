@@ -45,4 +45,6 @@ jobs:
 
     - name: Deploy Docker Container on EC2
       run: |
-        ssh -i ${{ secrets.SSH_PRIVATE_KEY }} -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "docker-compose -f ~/app/docker-compose.yml pull && docker-compose -f ~/app/docker-compose.yml up -d"
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+        chmod 600 key.pem
+        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "docker-compose -f ~/app/docker-compose.yml pull && docker-compose -f ~/app/docker-compose.yml up -d"
