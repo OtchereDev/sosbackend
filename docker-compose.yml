@@ -9,9 +9,10 @@ services:
     ports:
       - '3000:3000'
     environment:
-      - DATABASE_HOST=localhost
-      - DATABASE_PORT=5432
-      - DATABASE_USER=your_db_user # Replace with your DB user
-      - DATABASE_PASSWORD=your_db_password # Replace with your DB password
-      - DATABASE_NAME=your_db_name # Replace with your DB name
-
+      - MONGO_URI=
+      - JWT_SECRET=
+      - CLOUDINARY_API_KEY=
+      - CLOUDINARY_CLOUDNAME=
+      - APP_ID=
+      - AGORA_CERTIFICATE=
+      - AGORA_ID=
