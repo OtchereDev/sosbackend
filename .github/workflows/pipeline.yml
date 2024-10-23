@@ -36,16 +36,6 @@ jobs:
     - name: Push Docker Image to Docker Hub
       run: docker push otcheredev/sosbackend:latest
 
-    # - name: Push Docker Image to EC2
-    #   uses: appleboy/scp-action@v0.1.6
-    #   with:
-    #     host: ${{ secrets.EC2_HOST }}
-    #     username: ${{ secrets.EC2_USER }}
-    #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-    #     port: ${{ secrets.EC2_PORT || 22 }}
-    #     source: "docker-compose.yml"
-    #     target: "~/app/docker-compose.yml"
-
     - name: Deploy Docker Container on EC2
       run: |
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem

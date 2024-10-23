@@ -7,7 +7,7 @@ import { IResponder } from './types/IResponder';
 admin.initializeApp();
 
 const apiKey = 'aea3493c-8221-475d-bcec-01d32eabe2b2'; //functions.config().api.key;
-const apiUrl = 'https://sosbackend.fly.dev'; //functions.config().api.url;
+const apiUrl = 'http://ec2-3-142-152-221.us-east-2.compute.amazonaws.com'; //functions.config().api.url;
 
 export const onResponderDocumentChange = onDocumentWritten(
   'responders/{responderId}',

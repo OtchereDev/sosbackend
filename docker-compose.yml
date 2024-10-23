@@ -9,10 +9,19 @@ services:
     ports:
       - '3000:3000'
     environment:
-      - MONGO_URI=
-      - JWT_SECRET=
-      - CLOUDINARY_API_KEY=
-      - CLOUDINARY_CLOUDNAME=
-      - APP_ID=
-      - AGORA_CERTIFICATE=
-      - AGORA_ID=
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_CLOUDNAME=${CLOUDINARY_CLOUDNAME}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - APP_ID=${APP_ID}
+      - AGORA_CERTIFICATE=${AGORA_CERTIFICATE}
+      - AGORA_ID=${AGORA_ID}
+  nginx:
+    image: nginx:alpine
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
