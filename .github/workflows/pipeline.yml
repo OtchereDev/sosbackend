@@ -47,4 +47,11 @@ jobs:
       run: |
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
         chmod 600 key.pem
-        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "docker-compose -f ~/app/docker-compose.yml pull && docker-compose -f ~/app/docker-compose.yml up -d"
+        ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "
+          # Remove any incorrect docker-compose.yml directory if it exists
+          [ -d ~/app/docker-compose.yml ] && rm -rf ~/app/docker-compose.yml;
+          # Verify file is now correct
+          ls -l ~/app;
+          # Now run Docker Compose
+          docker-compose -f ~/app/docker-compose.yml pull && docker-compose -f ~/app/docker-compose.yml up -d
+        "
