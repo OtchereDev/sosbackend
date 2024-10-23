@@ -33,6 +33,9 @@ jobs:
     - name: Tag Docker Image
       run: docker tag sosbackend otcheredev/sosbackend:latest
 
+    - name: Push Docker Image to Docker Hub
+      run: docker push otcheredev/sosbackend:latest
+
     # - name: Push Docker Image to EC2
     #   uses: appleboy/scp-action@v0.1.6
     #   with:
