@@ -38,6 +38,7 @@ lerna-debug.log*
 firebase-service-account.json
 .firebaserc
 firebase.json
+sosbackend.pem
 
 # dotenv environment variable files
 .env
