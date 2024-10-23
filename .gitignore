@@ -35,7 +35,7 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-firebase-service-account.json
+# firebase-service-account.json
 .firebaserc
 firebase.json
 sosbackend.pem
