@@ -13,13 +13,13 @@ export class AgoraController {
   @UseGuards(AuthGuard)
   generateToken(@Body() body: CreateTokenDTO, @Req() req: any) {
     const userId = req.user.sub;
-    return this.service.generateRTCToken(userId, body.channelName);
+    return this.service.generateRTCToken(userId, body.channelName, body.role);
   }
 
   @Post('tokens/responder')
   @UseGuards(ResponderAuthGuard)
   async generateResponderToken(@Body() body: CreateTokenDTO, @Req() req: any) {
     const userId = req.user.sub;
-    return this.service.generateRTCToken(userId, body.channelName);
+    return this.service.generateRTCToken(userId, body.channelName, body.role);
   }
 }
