@@ -209,4 +209,13 @@ export class UsersService {
       message: 'Successfully updated emergency contact',
     };
   }
+
+  async getUserById(id: string) {
+    const user = await this.userModel.findById(id);
+
+    return {
+      status: 200,
+      user,
+    };
+  }
 }

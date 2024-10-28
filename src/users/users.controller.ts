@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Patch,
   Post,
   Req,
@@ -18,7 +19,7 @@ import { Response } from 'express';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { ForgotPasswordDTO } from './dto/ForgotPasswordDTO.dto';
 import { ResetPasswordDTO } from './dto/ResetPasswordDTO.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard, ResponderAuthGuard } from 'src/auth/auth.guard';
 
 @Controller('users')
 @ApiTags('Users')
@@ -56,6 +57,14 @@ export class UsersController {
   async getProfile(@Res() res: Response, @Req() req: any) {
     const email = req.user.email;
     const response = await this.service.getProfile(email);
+
+    return res.status(response.status).json(response);
+  }
+
+  @Get('responder/:id')
+  @UseGuards(ResponderAuthGuard)
+  async getProfileResponder(@Param('id') id: string, @Res() res: Response) {
+    const response = await this.service.getUserById(id);
 
     return res.status(response.status).json(response);
   }
