@@ -120,6 +120,19 @@ export class EmergencyController {
     return res.status(response.status).json(response);
   }
 
+  @Get('responder/:id')
+  @UseGuards(ResponderAuthGuard)
+  async getEmergencyResponder(
+    @Param('id') id: string,
+    @Res() res: Response,
+    @Req() req: any,
+  ) {
+    const sub = req.user.sub;
+    const response = await this.service.geEmergencyResponder(id, sub);
+
+    return res.status(response.status).json(response);
+  }
+
   @Get('/:id')
   @UseGuards(AuthGuard)
   async getEmergency(
