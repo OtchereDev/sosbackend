@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Bedrock } from '@langchain/community/llms/bedrock';
+import { BedrockChat } from '@langchain/community/chat_models/bedrock';
+
 import {
   BedrockClient,
   ListFoundationModelsCommand,
@@ -8,36 +10,40 @@ import {
 @Injectable()
 export class AiService {
   private llm: Bedrock;
-  private client: BedrockClient;
+  private chatter: BedrockChat;
   constructor() {
     this.llm = new Bedrock({
-      model: 'mistral.mistral-7b-instruct-v0:2',
+      model: 'anthropic.claude-3-5-sonnet-20240620-v1:0',
       region: process.env.AWS_REGION ?? 'us-east-1',
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY,
-        secretAccessKey: process.env.AWS_ACCESS_SECRET,
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID1,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY1,
       },
       temperature: 0,
       maxTokens: undefined,
     });
-    this.client = new BedrockClient({ region: process.env.AWS_REGION });
+
+    this.chatter = new BedrockChat({
+      model: 'anthropic.claude-3-5-sonnet-20240620-v1:0',
+      region: process.env.AWS_REGION,
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID1,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY1,
+      },
+    });
   }
 
   async testLLM() {
-    try {
-      const command = new ListFoundationModelsCommand({});
-      const response = await this.client.send(command);
-
-      console.log('Available Models:', response);
-    } catch (err) {
-      console.error('Error fetching models:', err);
-    }
-
-    const inputText = 'Human: Bedrock is an AI company that\nAssistant: ';
-    const completion = await this.llm.invoke(inputText);
+    const aiMsg = await this.chatter.invoke([
+      [
+        'system',
+        'You are a helpful assistant that translates English to French. Translate the user sentence.',
+      ],
+      ['human', 'I love programming.'],
+    ]);
 
     return {
-      completion,
+      aiMsg,
     };
   }
 }
