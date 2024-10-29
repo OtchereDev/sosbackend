@@ -6,6 +6,7 @@ import {
   BedrockClient,
   ListFoundationModelsCommand,
 } from '@aws-sdk/client-bedrock';
+import { BaseLanguageModelInput } from '@langchain/core/language_models/base';
 
 @Injectable()
 export class AiService {
@@ -33,17 +34,11 @@ export class AiService {
     });
   }
 
-  async testLLM() {
-    const aiMsg = await this.chatter.invoke([
-      [
-        'system',
-        'You are a helpful assistant that translates English to French. Translate the user sentence.',
-      ],
-      ['human', 'I love programming.'],
-    ]);
+  async completionsLLM(chat: BaseLanguageModelInput) {
+    const aiMsg = await this.chatter.invoke(chat);
 
     return {
-      aiMsg,
+      response: aiMsg.content,
     };
   }
 }

@@ -12,6 +12,7 @@ import { AgoraModule } from './agora/agora.module';
 import { GuideModule } from './guide/guide.module';
 import { AiModule } from './ai/ai.module';
 import { EmbeddingModule } from './embedding/embedding.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { EmbeddingModule } from './embedding/embedding.module';
     GuideModule,
     AiModule,
     EmbeddingModule,
+    ChatModule,
   ],
   controllers: [],
   providers: [],
