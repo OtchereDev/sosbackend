@@ -90,12 +90,8 @@ export class Emergency {
 
   @Prop({ type: [Number], default: [] })
   textEmbedding: number[];
-
-  @Prop({ type: [Number], default: [] })
-  imageEmbedding: number[];
 }
 
 export const EmergencySchema = SchemaFactory.createForClass(Emergency);
 
 EmergencySchema.index({ location: '2dsphere' });
-// EmergencySchema.index({ textEmbedding: 'vector' }, { dimensions: 768 });

@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Emergency, EmergencySchema } from './models/Emergency.model';
 import { User, UserSchema } from 'src/users/models/User.model';
 import { RespondersModule } from 'src/responders/responders.module';
+import { EmbeddingModule } from 'src/embedding/embedding.module';
 
 @Module({
   providers: [EmergencyService],
@@ -15,6 +16,7 @@ import { RespondersModule } from 'src/responders/responders.module';
       { name: User.name, schema: UserSchema },
     ]),
     RespondersModule,
+    EmbeddingModule,
   ],
 })
 export class EmergencyModule {}

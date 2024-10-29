@@ -9,6 +9,7 @@ import { RespondersService } from 'src/responders/responders.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { ResponderStatus } from 'src/responders/models/Responder.models';
+import { EmbeddingService } from 'src/embedding/embedding.service';
 
 @Injectable()
 export class EmergencyService {
@@ -18,6 +19,7 @@ export class EmergencyService {
     @Inject() private responderService: RespondersService,
     private schedulerRegistry: SchedulerRegistry,
     private firebaseService: FirebaseService,
+    private embeddingService: EmbeddingService,
   ) {}
 
   async getMyEmergency(email: string) {
@@ -95,6 +97,9 @@ export class EmergencyService {
       description: body.description,
       severity: body.severity,
       photos: body.photos ?? [],
+      textEmbedding: await this.embeddingService.getTextEmbedding(
+        body.description,
+      ),
     });
 
     this.assignResponderToEmergency({

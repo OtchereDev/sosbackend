@@ -11,6 +11,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { AgoraModule } from './agora/agora.module';
 import { GuideModule } from './guide/guide.module';
 import { AiModule } from './ai/ai.module';
+import { EmbeddingModule } from './embedding/embedding.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { AiModule } from './ai/ai.module';
     AgoraModule,
     GuideModule,
     AiModule,
+    EmbeddingModule,
   ],
   controllers: [],
   providers: [],
