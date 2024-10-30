@@ -1,21 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import OpenAI from 'openai';
+import { pipeline } from '@xenova/transformers';
 
 @Injectable()
 export class EmbeddingService {
-  private client: OpenAI;
-
-  constructor() {
-    this.client = new OpenAI();
-  }
+  constructor() {}
 
   async getTextEmbedding(text: string) {
-    const embedding = await this.client.embeddings.create({
-      model: 'text-embedding-ada-002',
-      input: text,
-      encoding_format: 'float',
-    });
-
-    return embedding.data[0].embedding;
+    const embedder = await pipeline(
+      'feature-extraction',
+      'Xenova/nomic-embed-text-v1',
+    );
+    const results = await embedder(text, { pooling: 'mean', normalize: true });
+    return Array.from(results.data);
   }
 }
