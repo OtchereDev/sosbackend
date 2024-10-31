@@ -6,6 +6,7 @@ import { Emergency, EmergencySchema } from './models/Emergency.model';
 import { User, UserSchema } from 'src/users/models/User.model';
 import { RespondersModule } from 'src/responders/responders.module';
 import { EmbeddingModule } from 'src/embedding/embedding.module';
+import { AiModule } from 'src/ai/ai.module';
 
 @Module({
   providers: [EmergencyService],
@@ -17,6 +18,7 @@ import { EmbeddingModule } from 'src/embedding/embedding.module';
     ]),
     RespondersModule,
     EmbeddingModule,
+    AiModule,
   ],
 })
 export class EmergencyModule {}

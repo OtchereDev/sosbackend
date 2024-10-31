@@ -10,6 +10,8 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { ResponderStatus } from 'src/responders/models/Responder.models';
 import { EmbeddingService } from 'src/embedding/embedding.service';
+import { SmartApplyDTO } from './dto/SmartApply.dto';
+import { AiService } from 'src/ai/ai.service';
 
 @Injectable()
 export class EmergencyService {
@@ -20,6 +22,7 @@ export class EmergencyService {
     private schedulerRegistry: SchedulerRegistry,
     private firebaseService: FirebaseService,
     private embeddingService: EmbeddingService,
+    private aiService: AiService,
   ) {}
 
   async getMyEmergency(email: string) {
@@ -413,5 +416,20 @@ export class EmergencyService {
         message: error.message,
       };
     }
+  }
+
+  async smartApply(body: SmartApplyDTO, email: string) {
+    const aiRes = await this.aiService.chooseService(body.description);
+    const [service, severity] = aiRes.selectedService.split(',');
+
+    return await this.createEmergency(
+      {
+        ...body,
+        severity: severity.trim(),
+        photos: [],
+        emergencyType: service.trim(),
+      },
+      email,
+    );
   }
 }

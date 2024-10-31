@@ -120,4 +120,10 @@ export class ChatService {
       };
     }
   }
+
+  async chooseService(content: string) {
+    const response = await this.aiService.chooseService(content);
+
+    return response;
+  }
 }

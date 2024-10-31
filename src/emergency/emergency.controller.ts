@@ -15,6 +15,7 @@ import { Response } from 'express';
 import { CreateEmergencyDTO } from './dto/CreateEmergency.dto';
 import { AuthGuard, ResponderAuthGuard } from 'src/auth/auth.guard';
 import { ApiTags } from '@nestjs/swagger';
+import { SmartApplyDTO } from './dto/SmartApply.dto';
 
 @Controller('emergency')
 @ApiTags('Emergency')
@@ -42,6 +43,19 @@ export class EmergencyController {
   ) {
     const email = req.user.email;
     const response = await this.service.createEmergency(body, email);
+
+    return res.status(response.status).json(response);
+  }
+
+  @Post('/create/smart')
+  @UseGuards(AuthGuard)
+  async createSmartEmergency(
+    @Body() body: SmartApplyDTO,
+    @Res() res: Response,
+    @Req() req: any,
+  ) {
+    const email = req.user.email;
+    const response = await this.service.smartApply(body, email);
 
     return res.status(response.status).json(response);
   }
