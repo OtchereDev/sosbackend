@@ -1,8 +1,10 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { GuideService } from './guide.service';
 import { CreateCategory } from './dto/CreateCategory.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('guide')
+@ApiTags('Guide')
 export class GuideController {
   constructor(private service: GuideService) {}
 

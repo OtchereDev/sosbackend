@@ -117,11 +117,13 @@ export class EmergencyService {
       },
     });
 
+    const { textEmbedding, ...data } = emergency;
+
     return {
       status: 200,
       message: 'Emergency successfully created',
       data: {
-        emergency,
+        emergency: data,
       },
     };
   }
