@@ -88,7 +88,7 @@ export class Emergency {
   @Prop({ default: new Date() })
   retryTime?: Date;
 
-  @Prop({ type: [Number], default: [] })
+  @Prop({ type: [Number], default: [], select: false })
   textEmbedding: number[];
 }
 
