@@ -100,9 +100,9 @@ export class EmergencyService {
       description: body.description,
       severity: body.severity,
       photos: body.photos ?? [],
-      textEmbedding: await this.embeddingService.getTextEmbedding(
-        body.description,
-      ),
+      // textEmbedding: await this.embeddingService.getTextEmbedding(
+      //   body.description,
+      // ),
     });
 
     this.assignResponderToEmergency({
