@@ -131,7 +131,7 @@ export class RespondersService {
               type: 'Point',
               coordinates: [longitude, latitude],
             },
-            $maxDistance: maxDistanceInMeters, // Maximum distance in meters (optional)
+            //$maxDistance: maxDistanceInMeters, // Maximum distance in meters (optional)
           },
         },
       },

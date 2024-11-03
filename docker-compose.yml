@@ -16,20 +16,11 @@ services:
       - AGORA_CERTIFICATE=${AGORA_CERTIFICATE}
       - AGORA_ID=${AGORA_ID}
 
-  # femina:
-  #   image: otcheredev/femina:latest # Replace with your second app's image name
-  #   ports:
-  #     - '4000:4000'
-  #   environment:
-  #     - DATABASE_URL=${FEMINA_DATABASE_URL} # Add any environment variables for the second app
-  #     - JWT_SECRET=${JWT_SECRET}
-
-  # nginx:
-  #   image: nginx:alpine
-  #   ports:
-  #     - '80:80'
-  #   volumes:
-  #     - ./nginx.conf:/etc/nginx/conf.d/default.conf
-  #   depends_on:
-  #     - app
-  #     - femina
+  nginx:
+    image: nginx:alpine
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
