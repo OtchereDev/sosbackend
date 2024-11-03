@@ -117,7 +117,7 @@ export class EmergencyService {
       },
     });
 
-    const { textEmbedding, ...data } = emergency;
+    const { textEmbedding, ...data } = (emergency as any)._doc;
 
     return {
       status: 200,
