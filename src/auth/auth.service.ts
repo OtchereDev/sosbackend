@@ -24,7 +24,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const payload = { sub: (user as any)._id, email: user.email };
+    const payload = { sub: (user as any)._id, email: user.email, type: 'user' };
     const { password: n, ...rest } = (user as any)._doc;
     const emergencyContact = await this.usersService.getEmergencyContact(
       (user as any)._id,
