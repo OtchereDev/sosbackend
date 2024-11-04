@@ -13,6 +13,7 @@ import { GuideModule } from './guide/guide.module';
 import { AiModule } from './ai/ai.module';
 import { EmbeddingModule } from './embedding/embedding.module';
 import { ChatModule } from './chat/chat.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { ChatModule } from './chat/chat.module';
     AiModule,
     EmbeddingModule,
     ChatModule,
+    DashboardModule,
   ],
   controllers: [],
   providers: [],
