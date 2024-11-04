@@ -3,8 +3,10 @@ import { DashboardService } from './dashboard.service';
 import { ResponderDashboardDTO } from './dto/Dashboard.dto';
 import { ResponderAuthGuard } from 'src/auth/auth.guard';
 import { Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('dashboard')
+@ApiTags('Dashboard')
 export class DashboardController {
   constructor(private service: DashboardService) {}
 
