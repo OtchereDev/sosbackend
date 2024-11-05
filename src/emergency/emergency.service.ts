@@ -151,7 +151,8 @@ export class EmergencyService {
       },
     );
 
-    await this.clearEmergency(`emergency-${emergencyId}`, emergencyId);
+    await this.clearEmergency(`emergency-${emergencyId}`);
+    await this.deleteActiveEmergencyFB(emergencyId);
 
     return {
       status: 200,
@@ -261,12 +262,14 @@ export class EmergencyService {
     this.schedulerRegistry.addInterval(name, interval);
   }
 
-  async clearEmergency(name: string, emergencyId: string) {
+  async clearEmergency(name: string) {
     console.log('Clearing emergency responder search');
     const interval = this.schedulerRegistry.getInterval(name);
     clearInterval(interval);
     this.schedulerRegistry.deleteInterval(name);
+  }
 
+  async deleteActiveEmergencyFB(emergencyId: string) {
     await this.firebaseService.deleteActiveEmergency(emergencyId);
   }
 
@@ -274,6 +277,7 @@ export class EmergencyService {
     const emergency = await this.emergencyModel.findOne({
       _id: body.emergencyId,
     });
+    const name = `emergency-${body.emergencyId}`;
 
     if (!emergency) {
       return {
@@ -301,6 +305,8 @@ export class EmergencyService {
       emergency_id: body.emergencyId,
       status: 'ON-ROUTE',
     });
+
+    await this.clearEmergency(name);
 
     return {
       status: 200,
