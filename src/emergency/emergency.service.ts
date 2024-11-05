@@ -341,6 +341,11 @@ export class EmergencyService {
       ResponderStatus.IDLE,
     );
 
+    await this.firebaseService.changeActiveEmergencyStatus({
+      emergency_id: body.emergencyId,
+      status: EmergencyStatus.RESOLVED,
+    });
+
     return {
       status: 200,
       message: 'emergency successfully completed',
