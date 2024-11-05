@@ -199,9 +199,15 @@ export class EmergencyService {
   }
 
   async geEmergencyResponder(emergencyId: string) {
-    const emergency = await this.emergencyModel.findOne({
-      _id: emergencyId,
-    });
+    const emergency = await this.emergencyModel.findOne(
+      {
+        _id: emergencyId,
+      },
+      undefined,
+      {
+        populate: ['user'],
+      },
+    );
 
     return {
       status: 200,
