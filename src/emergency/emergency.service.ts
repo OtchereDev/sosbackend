@@ -198,10 +198,9 @@ export class EmergencyService {
     };
   }
 
-  async geEmergencyResponder(emergencyId: string, responder: string) {
+  async geEmergencyResponder(emergencyId: string) {
     const emergency = await this.emergencyModel.findOne({
       _id: emergencyId,
-      responder,
     });
 
     return {

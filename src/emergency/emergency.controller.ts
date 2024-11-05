@@ -141,8 +141,7 @@ export class EmergencyController {
     @Res() res: Response,
     @Req() req: any,
   ) {
-    const sub = req.user.sub;
-    const response = await this.service.geEmergencyResponder(id, sub);
+    const response = await this.service.geEmergencyResponder(id);
 
     return res.status(response.status).json(response);
   }
