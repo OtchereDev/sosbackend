@@ -23,7 +23,14 @@ export class EmergencyGuide {
 
   @Prop()
   content: string;
+
+  get shortContent() {
+    return this.content ? this.content.slice(0, 100) : '';
+  }
 }
 
 export const EmergencyGuideSchema =
   SchemaFactory.createForClass(EmergencyGuide);
+
+EmergencyGuideSchema.set('toJSON', { virtuals: true });
+EmergencyGuideSchema.set('toObject', { virtuals: true });
