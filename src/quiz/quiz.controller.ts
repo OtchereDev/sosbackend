@@ -12,8 +12,10 @@ import { CreateQuiz } from './dto/CreateQuiz.dto';
 import { Response } from 'express';
 import { QuizTrial } from './dto/Quiztrial.dto';
 import { ResponderAuthGuard } from 'src/auth/auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('quiz')
+@ApiTags('Quiz')
 export class QuizController {
   constructor(private service: QuizService) {}
 
@@ -32,7 +34,7 @@ export class QuizController {
   }
 
   @Post('/solve')
-  // @UseGuards(ResponderAuthGuard)
+  @UseGuards(ResponderAuthGuard)
   async answerQuiz(@Body() body: QuizTrial, @Res() res: Response) {
     const response = await this.service.solveQuiz(body);
 
