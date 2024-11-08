@@ -14,6 +14,8 @@ import { AiModule } from './ai/ai.module';
 import { EmbeddingModule } from './embedding/embedding.module';
 import { ChatModule } from './chat/chat.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { QuizModule } from './quiz/quiz.module';
+import { PubliAnnouncementModule } from './publi-announcement/publi-announcement.module';
 
 @Module({
   imports: [
@@ -49,6 +51,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
     EmbeddingModule,
     ChatModule,
     DashboardModule,
+    QuizModule,
+    PubliAnnouncementModule,
   ],
   controllers: [],
   providers: [],
