@@ -16,6 +16,7 @@ import { ChatModule } from './chat/chat.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { QuizModule } from './quiz/quiz.module';
 import { PubliAnnouncementModule } from './publi-announcement/publi-announcement.module';
+import { TutorialsModule } from './tutorials/tutorials.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { PubliAnnouncementModule } from './publi-announcement/publi-announcement
     DashboardModule,
     QuizModule,
     PubliAnnouncementModule,
+    TutorialsModule,
   ],
   controllers: [],
   providers: [],

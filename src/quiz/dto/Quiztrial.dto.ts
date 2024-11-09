@@ -27,5 +27,6 @@ export class QuizTrial {
   answers: QuizTrialAnswer[];
 
   @IsMongoId()
+  @ApiProperty()
   quiz_id: string;
 }
