@@ -39,6 +39,7 @@ lerna-debug.log*
 .firebaserc
 firebase.json
 sosbackend.pem
+resqtrack.pem
 
 # dotenv environment variable files
 .env
